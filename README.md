@@ -1,2 +1,2 @@
-- Using the internal RTC of a STM32 Nucleo board I am transmitted the date and time to UART
+- Using the internal RTC of a STM32 Nucleo board I  transmitted the date and time RealTerm using UART communication
 - Now I am planning to make a binary clock on a breadboard using LEDs that light up based on the BCD value of the time.
