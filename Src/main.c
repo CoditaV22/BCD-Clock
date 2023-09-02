@@ -10,30 +10,25 @@
 
 
 static void display_calendar(void);
+static void SysTick_callback(void);
+static void uart_callback(void);
 
 uint8_t time_buffer[BUFF_LEN] = {0};
 uint8_t date_buffer[BUFF_LEN] = {0};
 
 char key;
 
-
-static void uart_callback(void);
 int main(void)
 {
 
-
-
-	uart2_rxtx_init();
 	uart2_rx_interrupt_init();
 	rtc_init();
+	systick_1Hz_interrupt();
 
-	while(1)
-	{
-		display_calendar();
-		GPIO_set_light();
-		systickDelayMs(500);
+	while(1){
 
 	}
+
 }
 
 static void display_calendar(void)
@@ -46,14 +41,16 @@ static void display_calendar(void)
 													   ,rtc_convert_bcd2bin(rtc_time_get_minute())
 													   ,rtc_convert_bcd2bin(rtc_time_get_second()));
 
-	sprintf((char *)date_buffer , "%.2d - %.2d - %.2d" ,rtc_convert_bcd2bin(rtc_date_get_day())
-													   ,rtc_convert_bcd2bin(rtc_date_get_month())
-													   ,rtc_convert_bcd2bin(rtc_date_get_year()));
+
 }
 
 static void uart_callback(void)
 {
 	key =  USART2->RDR;
+
+	sprintf((char *)date_buffer , "%.2d - %.2d - %.2d"     ,rtc_convert_bcd2bin(rtc_date_get_day())
+														   ,rtc_convert_bcd2bin(rtc_date_get_month())
+														   ,rtc_convert_bcd2bin(rtc_date_get_year()));
 
 	if(key == '1')
 		{
@@ -69,10 +66,20 @@ void USART2_IRQHandler(void)
 
 	if(USART2-> ISR & ISR_RXNE)
 	{
-		//Do something
 		uart_callback();
 
 	}
+}
+
+static void SysTick_callback(void)
+{
+	display_calendar();
+	GPIO_set_light();
+}
+
+void SysTick_Handler(void)
+{
+	SysTick_callback();
 }
 
 
