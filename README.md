@@ -1,4 +1,4 @@
-- Using the internal RTC of a STM32 Nucleo board I transmitted time to RealTerm using UART communication. This happens in a SysTick Timer ISR.
+**Using the internal RTC of a STM32 Nucleo board I transmitted time to RealTerm using UART communication. This happens in a SysTick Timer ISR.**
  
 **The user can:**
 - check the date by pressing 'D' when terminal is connected 
